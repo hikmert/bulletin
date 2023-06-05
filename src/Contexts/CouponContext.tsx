@@ -9,6 +9,7 @@ export interface OddData {
     rate: string;
     name: string;
     code: string;
+    betId: string
 }
 
 export interface IBets {
@@ -53,12 +54,20 @@ type CouponProviderProps = {
 export const CouponProvider: React.FC<CouponProviderProps> = ({children}) => {
     const [clickedCells, setClickedCells] = useState<OddData[]>([]);
     const setClickedCell = (cell: OddData) => {
-        const match = clickedCells.find(prevCell => prevCell.code === cell.code)
-        if (match) {
-            setClickedCells(clickedCells.filter(cell => cell.code !== match.code))
-            return;
-        }
+        const rowMatched = clickedCells.find(prevCell => prevCell.code === cell.code)
+        if (rowMatched) {
+            if(rowMatched.betId === cell.betId) {
+                const newCells = clickedCells.filter(cell => cell.code !== rowMatched.code)
+                setClickedCells(newCells);
+                return;
+            }else{
+                const newCells = clickedCells.filter(cell => cell.betId !== rowMatched.betId)
+                setClickedCells((prevClickedCells) => [...newCells, cell]);
+                return;
+            }
+        }else{
         setClickedCells((prevClickedCells) => [...prevClickedCells, cell]);
+    };
     };
     return (
         <CouponContext.Provider value={{clickedCells, setClickedCell}}>

@@ -15,13 +15,16 @@ export const DetailsRow: FC<DetailsProps> = memo(({index, data}: DetailsRowProps
     const ocgValues = Object.values(data.OCG);
     const cellClickContext = useContext(CouponContext);
     const setClickedCell = cellClickContext?.setClickedCell;
+    const couponContext = useContext(CouponContext);
+    const couponData = couponContext?.clickedCells;
 
     const handleCellClick = (ocItem: any) => {
         if (setClickedCell) {
             setClickedCell({
                 name: data.N,
                 code: data.C,
-                rate: ocItem,
+                rate: ocItem.O,
+                betId: ocItem.ID
             });
         }
 
@@ -40,7 +43,8 @@ export const DetailsRow: FC<DetailsProps> = memo(({index, data}: DetailsRowProps
                     <div
                         key={`${ocKey}-${ocItem.ID}`} // Assign a unique key to each child element
                         className="cell"
-                        onClick={() => handleCellClick(ocItem.O)}
+                        onClick={() => handleCellClick(ocItem)}
+                        style={couponData?.find((cell) => cell.code === data.C && cell.betId === ocItem.ID) ? {backgroundColor: "yellow"} : {}}
                     >
                         {ocItem.O}
                     </div>

@@ -1,5 +1,6 @@
 import {CouponContext} from "../../Contexts/CouponContext";
 import {useContext} from "react";
+import {randomUUID} from "crypto";
 
 export const Coupon = () => {
     const couponContext = useContext(CouponContext);
@@ -12,7 +13,7 @@ export const Coupon = () => {
         <>
             {couponData && couponData.length > 0 && couponData.map((row) => {
                 return (
-                    <div>
+                    <div key ={row.betId + row.code}>
                         {`4. Kod ${row.code} Maç: ${row.name} Oran: ${row.rate}`}
                     </div>
                 )
